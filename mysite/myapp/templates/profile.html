@@ -1,1 +1,12 @@
-Profile Page
+{% extends "myapp/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Profile Page</h1>
+    <p>Name: {{ profile.first_name }} {{ profile.last_name }}</p>
+    <p>Username: {{ user }} </p>
+    <p>Email: {{ user.email }}</p>
+
+</div>
+
+{% endblock %}

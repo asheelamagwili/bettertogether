@@ -4,25 +4,21 @@
 {% block title %}<Insert Title>{% endblock %}
 
 {% block content %}
+
 <form action="/submit" method="post">
   {% csrf_token %}
   {{ form }}
   <input type="submit" class="button" value="Submit">
 </form>
-<!--
-  <div>
-  <form action="/" method="post">
-    {% csrf_token %}-->
-    <!-- Displays any errors when user fills out form -->
-    <!--{{ whiteboard_form.errors }}-->
-    <!-- Displays the subject's field label -->
-    <!--{{ whiteboard_form.subject.label }} -->
-    <!-- Displays the subject's field -->
-    <!--{{ whiteboard_form.subject }} -->
-    <!-- Displays the public/private checkbox label -->
-    <!--{{ whiteboard_form.whiteboard_key.label }}-->
-    <!-- Displays the public/private checkbox -->
-    <!--{{ whiteboard_form.whiteboard_key }}
+
+  <!-- <div>
+  <form action="/dashboard/" method="post">
+    {% csrf_token %}
+    {{ whiteboard_form.errors }}
+    {{ whiteboard_form.subject.label }}
+    {{ whiteboard_form.subject }}
+    {{ whiteboard_form.whiteboard_key.label }}
+    {{ whiteboard_form.whiteboard_key }}
     <input type="submit" class="button" value="Submit">
   </form>
 </div>-->

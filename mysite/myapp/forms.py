@@ -9,6 +9,8 @@ from .models import WhiteBoard
 
 # User Registration Form
 class RegistrationForm(UserCreationForm):
+    first_name = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "First Name"}))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Last Name"}))
     username = forms.CharField(max_length=100, widget=forms.TextInput(attrs={"placeholder": "Username"}))
     email = forms.EmailField(label = "Email", widget=forms.TextInput(attrs={"placeholder": "Email"}), required=True)
     password1 = forms.CharField(max_length=100, widget=forms.PasswordInput(attrs={"placeholder": "Password"}))
@@ -16,11 +18,13 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("username","email","password1","password2")
+        fields = ["first_name","last_name","username","email","password1","password2"]
 
     def save(self,commit=True):
         user = super(RegistrationForm,self).save(commit=False)
         user.email = self.cleaned_data["email"]
+        user.first_name = self.cleaned_data["first_name"]
+        user.last_name = self.cleaned_data["last_name"]
         if commit:
             user.save()
         return user

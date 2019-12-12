@@ -25,7 +25,7 @@ SECRET_KEY = '0kj-+cj7ktrg%u1i80#6=o4t=%hx$q@xnzn^_qgiiy1kj%#vq6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['34.94.154.52']
 
 # Redirects the success page (page after successful login) to home
 LOGIN_REDIRECT_URL = "/dashboard/"

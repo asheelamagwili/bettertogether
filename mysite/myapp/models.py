@@ -13,6 +13,7 @@ class WhiteBoard(models.Model):
 class Profile(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
+    email = models.CharField(max_length=30)
     username = models.CharField(max_length=30)
-    image = models.ImageField()
-    bio = models.CharField(max_length=500)
+    image = models.ImageField(blank=True)
+    bio = models.CharField(max_length=500,blank=True)

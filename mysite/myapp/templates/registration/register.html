@@ -8,6 +8,8 @@
       <div class="form">
         {% csrf_token %}
         {{ registration_form.errors }}
+        <p>{{registration_form.first_name }}</p>
+        <p>{{registration_form.last_name }}</p>
         <p>{{registration_form.username }}</p>
         <p>{{ registration_form.email }}</p>
         <p>{{ registration_form.password1 }}</p>
