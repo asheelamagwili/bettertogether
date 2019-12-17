@@ -11,6 +11,16 @@
 {% load static %}
 <body>
     <div class="row">
+        <nav>
+            <div class="navbar-button">
+                <ul>
+                    <li><a href="/dashboard/" class="button">Go Back</a></li>
+                    <li><button id="red_marker" class="button">Red</button></li>
+                    <li><button id="blue_marker" class="button">Blue</button></li>
+                    <li><button id="black_marker" class="button">Black</button></li>
+                </ul>
+            </div>
+        </nav>
         <div class = "columns">
             <h4> Chat </h4>
             <textarea id="chat-log" cols="100" rows="20" readonly></textarea><br/>
@@ -19,18 +29,8 @@
                 <input id="chat-message-submit" type="button" value="Send" class ="chatbutton"/>
             </div>
         </div>
-        <!--<table class="room_grid">
-            <thead>
-                <tr>
-                    <th width="150">In This Room</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ user }}</td>
-                </tr>
-            </tbody>
-        </table> -->
+
+        <!-- CANVAS WHITEBOARD -->
         <script src="https://cdn.pubnub.com/pubnub-3.15.2.min.js"></script>
         <script src="https://cdn.pubnub.com/pubnub.min.js"></script>
         <script src="{% static "js/canvas.js" %}"></script>
@@ -38,7 +38,6 @@
     </div>
 
 </body>
-<!--<script src="{% static 'reconnecting-websocket.js' %}"></script>-->
 
 <!-- --------- CANVAS WHITEBOARD SCRIPT --------- 
 <script>

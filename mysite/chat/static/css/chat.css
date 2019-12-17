@@ -38,7 +38,7 @@ textarea {
 .chatbutton {
     padding: 10px;
     position: relative;
-    left: 333px;
+    left: 320px;
     bottom: 80px;
 }
 
@@ -68,8 +68,16 @@ h4 {
 }
 
 .canvas {
-    width:69%;
-    height: 90%;
-    position: absolute;
-    bottom:20px;
+    position:initial;
+    width:740px;
+    height:670px;
+}
+
+.navbar-button li{
+    list-style: none;
+    display: inline-block; 
+}
+
+nav {
+    background-color: coral;
 }

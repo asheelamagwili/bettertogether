@@ -1,19 +1,32 @@
-// Looks like functions are executing because console messages are printing
-// Doesn't actually print out the output
 
 window.addEventListener("load", () => {
     // Gets the canvas
     const canvas = document.querySelector("#canvas");
     // Defines what context were working in
     const ctx = canvas.getContext("2d");
- 
+    // Gets the color of the marker
+    const red_marker = document.querySelector("#red_marker");
+    const blue_marker = document.querySelector("#blue_marker");
+    const black_marker = document.querySelector("#black_marker");
+    // Event listener that listens when the button is pushed
+    red_marker.addEventListener("mousedown", red);
+    blue_marker.addEventListener("mousedown", blue);
+    black_marker.addEventListener("mousedown", black);
+    // Keeps track of the current color
+    const current_color = '';
+
     // Holds start & end positions
     var start = {};
     var end = {};
     var plots = [];
 
-    // Tracks currently executing function
-    var current_function = '';
+    // Initialize the PubNub API
+    var channel = 'my-draw-demo';
+    var pubnub = PUBNUB.init({
+      publish_key: "pub-c-e77bd0c0-5551-48fd-900b-0528b548d2a3",
+      subscribe_key: "sub-c-f3c4a864-170f-11ea-a1d5-ea5a03b00545",
+      ssl: true
+    });
 
     // Programmatically resizes to the window
     canvas.height = window.innerHeight;
@@ -25,33 +38,67 @@ window.addEventListener("load", () => {
     // Start drawing
     function startDrawing(e){
       drawing = true;
+      ctx.beginPath();
+      //storeCoordinate(e.clientX,e.clientY, plots);
       draw(e);
-      current_function = "startDrawing";
-      //Handling the click event
-      console.log("coordinate-start sent: " + JSON.stringify(start))
-      //console.log("command -> startDrawing");
     }
   
     // Stop drawing
     function endDrawing(){
       drawing = false;
       ctx.beginPath();
-      current_function = "endDrawing";
-      //Handling the click event
-      console.log("coordinate-end sent: " + JSON.stringify(start))
-      //console.log("command -> endDrawing");
-      console.log("coordinates sent: " + JSON.stringify(plots))
-      /*boardSocket.send(JSON.stringify({
-        'coordinates': coords
-      }));*/
+  
+      // Send data
+      pubnub.publish({
+        channel: "pubnub_onboarding_channel",
+        message: {
+          "plots": plots
+        },
+        callback: function(m) {
+          console.log(m)
+        }
+      });
+
+      // Empty the array again
+      plots = [];
+
+      // Retrieve Data
+      pubnub.subscribe({
+        channel: ['pubnub_onboarding_channel'],
+        message: function(m) {
+          console.log(m)
+        },
+        callback: drawFromStream,
+
+        // Add presence
+        presence: function(m){
+          var element = document.getElementById('occupancy');
+          if(element){
+            element.textContent = m.occupancy;
+          }
+        }
+      });
+
+      // Draw the data received from the stream
+      //drawFromStream(message);
+    }
+
+    // Function to draw the received data
+    function drawFromStream(message) {
+      if(!message) return;        
+  
+      ctx.beginPath();
+      drawOnCanvas(message.plots);
     }
   
+    // Draw on own user the canvas
     function draw(e){
       if(!drawing) return;
   
       // Style the default tool - black & circular
       ctx.lineWidth = 10;
       ctx.lineCap = "round";
+      updateColor(current_color);
   
       // Start moving the position
       ctx.lineTo(e.clientX,e.clientY);
@@ -60,7 +107,6 @@ window.addEventListener("load", () => {
       start.x = e.clientX;
       start.y = e.clientY;
       storeCoordinate(start.x, start.y, plots);
-      //console.log("start: " + JSON.stringify(start))
 
       ctx.stroke();
       ctx.beginPath();
@@ -71,12 +117,6 @@ window.addEventListener("load", () => {
       end.x = e.clientX;
       end.y = e.clientY;
       storeCoordinate(end.x, end.y, plots);
-  
- 
-      // Tell other users to start drawing
-      current_function = "draw";
-      //Handling the click event
-      //console.log('command -> draw')
     }
   
     // Listen for a mouse click & release
@@ -84,41 +124,13 @@ window.addEventListener("load", () => {
     canvas.addEventListener("mouseup", endDrawing);
     canvas.addEventListener("mousemove", draw);
 
+    // Function to store coordinates into a given array
     function storeCoordinate(xVal, yVal, array) {
       array.push({x: xVal, y: yVal});
     }
 
-    /* PUBNUB MULTIUSER CHAT API */
-    var channel = 'my-draw-demo';
-
-    var pubnub = PUBNUB.init({
-    //var pubnub = new PubNub({
-      publish_key: "pub-c-e77bd0c0-5551-48fd-900b-0528b548d2a3",
-      subscribe_key: "sub-c-f3c4a864-170f-11ea-a1d5-ea5a03b00545",
-      ssl: true
-    });
-
-    pubnub.publish({
-      'channel': channel,
-      'message': { 
-        'plots': plots // your array goes here
-      } 
-    });
-
-    pubnub.subscribe({
-      channel: channel,
-      callback: drawFromStream,
-
-      // Add presence
-      presence: function(m){
-        var element = document.getElementById('occupancy');
-        if(element){
-          element.textContent = m.occupancy;
-        }
-      }
-    });
-
-    function drawOnCanvas(color, plots) {
+    // Function to draw on the canvas in a given array
+    function drawOnCanvas(plots) {
       ctx.beginPath();
       ctx.moveTo(plots[0].x, plots[0].y);
     
@@ -128,11 +140,33 @@ window.addEventListener("load", () => {
       ctx.stroke();
     }
 
-    function drawFromStream(message) {
-      if(!message) return;        
-  
-      ctx.beginPath();
-      drawOnCanvas(message.plots);
+    // Functions to change the color of the marker
+    function red(e) {
+      ctx.strokeStyle = 'red';
+      current_color = 'red';
     }
-    /* END PUBNUB MULTIUSER CHAT API */
+
+    function blue(e) {
+      ctx.strokeStyle = 'blue';
+      current_color = 'blue';
+    }
+
+    function black(e) {
+      ctx.strokeStyle = 'black';
+      current_color = 'black';
+    }
+
+    function updateColor(color){
+      if(color == 'red') {
+        document.querySelector("#red_marker").click();
+      }
+
+      if(color == 'blue') {
+        document.querySelector("#blue_marker").click();
+      }
+
+      if(color == 'black') {
+        document.querySelector("#black_marker").click();
+      }
+    }
 });

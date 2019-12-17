@@ -113,8 +113,6 @@ def logout_view(request):
 def profile(request):
     if request.user.is_authenticated:
         context = {
-        #"update_form": update_form,
-    # Server side validation of the user
         }
         return render(request, "profile.html", context = context)
     # User is not validated on srver side - redirect to login

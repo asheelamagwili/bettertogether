@@ -24,7 +24,7 @@
         <ul>
             {% for w in whiteboards %}
             <li>
-                <a href="/chat/" class="button">{{ w.subject }}</a>
+                <a href="/chat/{{w.subject}}" class="button">{{ w.subject }}</a>
             </li>
             {% endfor %}
         </ul>
