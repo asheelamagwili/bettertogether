@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from django.contrib import messages
 from . import models
 from . import forms
 
@@ -27,12 +28,14 @@ def register(request):
     if request.method == "POST":
         RF_instance = forms.RegistrationForm(request.POST)
         if RF_instance.is_valid():
-            profile_instance = models.Profile(first_name=RF_instance.cleaned_data["first_name"],
-            last_name=RF_instance.cleaned_data["last_name"],
-            username=RF_instance.cleaned_data["username"],
-            email=RF_instance.cleaned_data["email"])
+            #profile_instance = models.Profile(first_name=RF_instance.cleaned_data["first_name"],
+            #last_name=RF_instance.cleaned_data["last_name"],
+            #username=RF_instance.cleaned_data["username"],
+            #email=RF_instance.cleaned_data["email"])
             RF_instance.save()
-            profile_instance.save()
+            #first_name = RF_instance.cleaned_data.get('first_name')
+            #messages.success(request, 'Your account has been created!')
+            #profile_instance.save()
             return redirect("/login/")
     else:
         RF_instance = forms.RegistrationForm()
@@ -108,33 +111,14 @@ def logout_view(request):
 @csrf_exempt
 @login_required(login_url='/login/')
 def profile(request):
-    # Server side validation of the user
-    profile_instance = models.Profile.objects.all()
     if request.user.is_authenticated:
         context = {
-            "title":"Profile",
-            "profile": profile_instance
+        #"update_form": update_form,
+    # Server side validation of the user
         }
         return render(request, "profile.html", context = context)
     # User is not validated on srver side - redirect to login
     else:
         return redirect("/login/")
 
-# Dashboard View
-#@csrf_exempt
-#@login_required(login_url='/login/')
-#def dashboard(request):
-    # Server side validation of the user
-#    if request.user.is_authenticated:
-#        if request.method == "GET":
-#            whiteboard_query = models.WhiteBoard.objects.all()
-#            whiteboard_list = {"whiteboards":[]}
-#            for w_q in whiteboard_query:
-#                whiteboard_list["whiteboards"] += [{"subject":w_q.subject,"whiteboard_key":w_q.whiteboard_key}]
-#        context = {
-#            "title":"Dashboard"
-#        }
-#        return render(request, "whiteboard/dashboard.html", context = context)
-    # User is not validated on srver side - redirect to login
-#    else:
-#        return redirect("/login/")
+ 

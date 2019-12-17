@@ -19,11 +19,12 @@
             </ul>
         </div>
     </nav>
-    <div>
+    <div class="whiteboards">
+        <h5>Whiteboards</h5>
         <ul>
             {% for w in whiteboards %}
             <li>
-                {{ w.subject }}
+                <a href="/chat/" class="button">{{ w.subject }}</a>
             </li>
             {% endfor %}
         </ul>

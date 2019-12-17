@@ -228,15 +228,57 @@ button {
 }
 
 
-.profilebox {
-    background-color: chocolate;
+h1 {
+    text-align: center;
+}
+
+.rounded-circle {
+    border-radius: 50%;
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 50%;
+    width: 150px;
+    padding: 5px;
+}
 
+.profilebox {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
 }
-.profilecontainer {
-    font-family: 'Josefin Sans', sans-serif;
+
+
+.profilebox p {
+    font-size: larger;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    top: 40px;
+    left: 87px;
+}
+
+.profilebox img {
+    top: 10px;
+}
+
+.profilebutton {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    position: relative;
+    top: 100px;
+    text-align: center;
+}
+
+.whiteboards li {
+    list-style: none;
+}
+
+.whiteboards h5 {
     color: rgb(247, 243, 231);
-}
+    margin: 1rem;
+
+
